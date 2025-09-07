@@ -8,10 +8,42 @@ const FileTransfer = dynamic(
   () => import("@/components/transfer/FileTransfer"),
   {
     ssr: false,
+    loading: () => <div className="flex items-center justify-center space-x-2">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            <span>Loading File Upload...</span>
+          </div>,
   },
 );
-// import FileTransfer from '@/components/transfer/FileTransfer'
-import QRCodeSync from "@/components/transfer/QRCodeSync";
+const QRCodeSync = dynamic(
+  () => import("@/components/transfer/QRCodeSync"),
+  {
+    ssr: false,
+    loading: () =>  <div className="flex items-center justify-center space-x-2">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            <span>Loading Qr Code...</span>
+          </div>,
+  },
+);
+const SimpleVideoUpload = dynamic(
+  () => import("@/components/transfer/SimpleVideoUpload"),
+  {
+    ssr: false,
+    loading: () => <div className="flex items-center justify-center space-x-2">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            <span>Loading Video...</span>
+          </div>,
+  },
+);
+const ReceivedTransfers = dynamic(
+  () => import("@/components/transfer/ReceivedTransfers"),
+  {
+    ssr: false,
+    loading: () =>  <div className="flex items-center justify-center space-x-2">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            <span>Loading Received Transfer...</span>
+          </div>,
+  },
+);
 import {
   Card,
   CardContent,
@@ -33,8 +65,7 @@ import {
   FileText,
   Image,
 } from "lucide-react";
-import SimpleVideoUpload from "@/components/transfer/SimpleVideoUpload";
-import ReceivedTransfers from "@/components/transfer/ReceivedTransfers";
+
 
 export default function TransferPage() {
   const [activeSessionKey, setActiveSessionKey] = useState<string | null>(null);
@@ -274,11 +305,7 @@ export default function TransferPage() {
 
             {/* Files Tab */}
             <TabsContent value="files" className="space-y-6">
-              {FileTransfer ? (
-                <FileTransfer sessionKey={activeSessionKey || undefined} />
-              ) : (
-                "Loading...."
-              )}
+              <FileTransfer sessionKey={activeSessionKey || undefined} />
             </TabsContent>
 
             {/* Video Tab */}
