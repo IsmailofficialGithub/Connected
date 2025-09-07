@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase, supabaseClient } from './supabase'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 interface AuthContextType {
     user: User | null
@@ -22,7 +22,8 @@ interface AuthContextType {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
+ const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     // Get initial session
@@ -38,18 +39,22 @@ interface AuthContextType {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log(event, session)
         setSession(session)
         setUser(session?.user ?? null)
         setLoading(false)
 
         // Handle auth events
-        if (event === 'SIGNED_IN') {
-          router.push('/transfer')
+      if (event === 'SIGNED_IN') {
+        // ✅ Only redirect if user is on /auth page
+        if (pathname.startsWith('/auth')) {
+          router.push('/dashboard')
         }
-        // if (event === 'SIGNED_OUT') {
-        //   router.push('/auth/login')
-        // }
+      }
+
+      if (event === 'SIGNED_OUT') {        
+          router.push('/auth/login')
+      }
+    
       }
     )
 
