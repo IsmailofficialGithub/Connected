@@ -280,7 +280,7 @@ export default function ReceivePage() {
 
           {/* Receive Tab */}
           <TabsContent value="receive">
-            <ReceivedTransfers sessionKey={sessionKey} />
+            <ReceivedTransfers sessionKey={sessionKey}  />
           </TabsContent>
 
           {/* Files Tab */}
